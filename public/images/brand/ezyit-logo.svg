@@ -1,0 +1,18 @@
+<svg viewBox="0 0 368 98" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <circle cx="15.5" cy="7.5" r="6.5" fill="#F9B916"/>
+  <rect x="8" y="17" width="10.5" height="46" fill="#003876"/>
+  <rect x="8" y="17" width="28" height="8.5" fill="#003876"/>
+  <rect x="8" y="36" width="24" height="7.5" fill="#E3521E"/>
+  <rect x="8" y="54.5" width="31" height="8.5" fill="#003876"/>
+  <path fill="#003876" d="M43 28 H67 V35 H53 L67 46.5 V53.5 H43 V46.5 H56.5 L43 35 V28 Z"/>
+  <polygon fill="#003876" points="61,24 81,24 75,33 67,33"/>
+  <rect x="73" y="33" width="8" height="10" fill="#003876"/>
+  <rect x="61" y="33" width="8" height="25" fill="#003876"/>
+  <rect x="36" y="51" width="33" height="7" fill="#003876"/>
+  <rect x="97" y="17" width="10.5" height="46" fill="#E3521E"/>
+  <rect x="113" y="17" width="36" height="8.5" fill="#E3521E"/>
+  <rect x="126" y="17" width="10.5" height="46" fill="#E3521E"/>
+  <text x="151" y="19" fill="#E3521E" font-size="9" font-weight="700" font-family="Arial,Helvetica,sans-serif">®</text>
+  <text x="40" y="84" fill="#003876" font-size="10.8" font-weight="700" font-family="Arial,Helvetica,sans-serif" letter-spacing="0.36em">TECH</text>
+  <text x="122" y="84" fill="#E3521E" font-size="10.8" font-weight="700" font-family="Arial,Helvetica,sans-serif" letter-spacing="0.28em">LIMITED</text>
+</svg>

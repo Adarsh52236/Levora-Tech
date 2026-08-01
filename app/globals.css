@@ -1,0 +1,199 @@
+@import 'tailwindcss';
+@import 'tw-animate-css';
+@import 'shadcn/tailwind.css';
+/* EzyIT dark theme */
+
+@custom-variant dark (&:is(.dark *));
+
+@theme inline {
+  --font-heading: var(--font-display);
+  --font-display: var(--font-display-family), var(--font-geist-sans), 'Geist Fallback';
+  --font-sans: var(--font-geist-sans), 'Geist Fallback';
+  --font-mono: var(--font-geist-mono), 'Geist Mono Fallback';
+
+  --color-background: var(--background);
+  --color-foreground: var(--foreground);
+  --color-card: var(--card);
+  --color-card-foreground: var(--card-foreground);
+  --color-popover: var(--popover);
+  --color-popover-foreground: var(--popover-foreground);
+  --color-primary: var(--primary);
+  --color-primary-foreground: var(--primary-foreground);
+  --color-secondary: var(--secondary);
+  --color-secondary-foreground: var(--secondary-foreground);
+  --color-muted: var(--muted);
+  --color-muted-foreground: var(--muted-foreground);
+  --color-accent: var(--accent);
+  --color-accent-foreground: var(--accent-foreground);
+  --color-destructive: var(--destructive);
+  --color-border: var(--border);
+  --color-input: var(--input);
+  --color-ring: var(--ring);
+
+  /* EzyIT brand accents */
+  --color-brand-blue: var(--brand-blue);
+  --color-brand-cyan: var(--brand-cyan);
+  --color-brand-amber: var(--brand-amber);
+  --color-brand-orange: var(--brand-orange);
+  --color-section-cool: var(--section-cool);
+  --color-section-warm: var(--section-warm);
+
+  --radius-sm: calc(var(--radius) * 0.6);
+  --radius-md: calc(var(--radius) * 0.8);
+  --radius-lg: var(--radius);
+  --radius-xl: calc(var(--radius) * 1.4);
+  --radius-2xl: calc(var(--radius) * 1.8);
+  --radius-3xl: calc(var(--radius) * 2.2);
+}
+
+:root {
+  color-scheme: light;
+
+  --background: #fdfdfd; /* Crisp white */
+  --foreground: #0b1a30; /* Very dark navy for text */
+
+  --card: #ffffff;
+  --card-foreground: #0b1a30;
+
+  --popover: #ffffff;
+  --popover-foreground: #0b1a30;
+
+  --primary: #003876; /* Deep logo blue */
+  --primary-foreground: #ffffff;
+
+  --secondary: #f0f4f8; /* Soft blue-tinted white */
+  --secondary-foreground: #0b1a30;
+
+  --muted: #f0f4f8;
+  --muted-foreground: #475d7b;
+
+  --accent: #f0f4f8;
+  --accent-foreground: #003876;
+
+  --destructive: #ef4444;
+
+  --border: rgba(11, 26, 48, 0.1);
+  --input: rgba(11, 26, 48, 0.15);
+  --ring: #003876; /* Blue focus ring */
+
+  /* Logo Colors Theme */
+  --brand-blue: #003876;
+  --brand-cyan: #1a6bb5;
+  --brand-amber: #f9b916;
+  --brand-orange: #e3521e;
+
+  /* Section rhythm */
+  --section-cool: #f8fafc;
+  --section-warm: #fdfdfd;
+
+  --radius: 0.75rem;
+}
+
+@layer base {
+  * {
+    @apply border-border outline-ring/50;
+  }
+  body {
+    @apply bg-background text-foreground;
+  }
+  html {
+    @apply font-sans;
+    scroll-behavior: smooth;
+    -webkit-font-smoothing: antialiased;
+  }
+}
+
+@layer utilities {
+  .text-balance {
+    text-wrap: balance;
+  }
+  .text-pretty {
+    text-wrap: pretty;
+  }
+
+  /* Subtle noise texture overlay for depth */
+  .noise-overlay::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    pointer-events: none;
+    opacity: 0.025;
+    z-index: 0;
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='120' height='120'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+  }
+
+  .gradient-text {
+    background: linear-gradient(120deg, #003876 0%, #e3521e 65%, #f9b916 100%);
+    -webkit-background-clip: text;
+    background-clip: text;
+    -webkit-text-fill-color: transparent;
+    color: transparent;
+  }
+
+  .brand-divider {
+    background: linear-gradient(
+      90deg,
+      transparent,
+      rgba(0, 56, 118, 0.5),
+      rgba(227, 82, 30, 0.5),
+      transparent
+    );
+  }
+
+  .font-display {
+    font-family: var(--font-display);
+    overflow: visible;
+  }
+
+  /* text-6xl/7xl set line-height:1 and clip Syne descenders — override minimally */
+  .display-title {
+    line-height: 1.12 !important;
+  }
+
+  .tracking-display {
+    letter-spacing: -0.03em;
+  }
+
+  .perspective-card {
+    transform-style: preserve-3d;
+    perspective: 800px;
+  }
+
+  .card-tilt {
+    transition: transform 0.35s cubic-bezier(0.23, 1, 0.32, 1);
+  }
+
+  .card-tilt:hover {
+    transform: rotateX(2deg) rotateY(-3deg) translateY(-4px);
+  }
+
+  @media (max-width: 768px) {
+    .mobile-no-blur {
+      backdrop-filter: none !important;
+    }
+  }
+
+  @keyframes marquee-scroll {
+    from { transform: translateX(0); }
+    to { transform: translateX(-50%); }
+  }
+
+  .animate-marquee {
+    animation: marquee-scroll 28s linear infinite;
+  }
+
+  .animate-marquee-slow {
+    animation: marquee-scroll 40s linear infinite;
+  }
+
+  .group\/marquee:hover .animate-marquee,
+  .group\/marquee:hover .animate-marquee-slow {
+    animation-play-state: paused;
+  }
+
+  @keyframes auto-progress {
+    from { transform: scaleX(0); }
+    to { transform: scaleX(1); }
+  }
+}
+
