@@ -1,5 +1,7 @@
 from contextlib import asynccontextmanager
 from fastapi import FastAPI
+from fastapi.openapi.docs import get_swagger_ui_html, get_redoc_html
+from fastapi.responses import HTMLResponse
 from fastapi.middleware.cors import CORSMiddleware
 from fastapi.middleware.gzip import GZipMiddleware
 from fastapi.middleware.trustedhost import TrustedHostMiddleware
@@ -94,28 +96,98 @@ async def lifespan(app: FastAPI):
         res_proj = await session.execute(select(Project))
         if not res_proj.scalars().all():
             initial_projects = [
+                # Featured project (shown at top, excluded from grid)
                 Project(
                     title="Fintech Analytics Platform",
                     slug="fintech-analytics",
-                    description="Real-time financial analytics dashboard handling high-frequency market data.",
-                    industry="Fintech",
+                    description="Real-time financial analytics dashboard handling high-frequency market data with sub-millisecond latency and interactive visualisations.",
+                    industry="Web",
                     client_name="NovaScale",
                     cover_image="/images/projects/saas-landing.svg",
                     technologies=["Next.js", "TypeScript", "FastAPI", "PostgreSQL"],
                     featured=True,
                     display_order=1
                 ),
+                # Web projects
+                Project(
+                    title="SaaS Operations Hub",
+                    slug="saas-ops-hub",
+                    description="Multi-tenant SaaS platform with role-based access, billing integrations, and a real-time activity feed for distributed teams.",
+                    industry="Web",
+                    client_name="Orbitly",
+                    cover_image="/images/projects/saas-landing.svg",
+                    technologies=["Next.js", "Prisma", "Stripe", "Redis"],
+                    featured=False,
+                    display_order=2
+                ),
+                Project(
+                    title="E-Commerce Storefront",
+                    slug="ecommerce-storefront",
+                    description="High-conversion e-commerce experience with personalised recommendations, headless CMS, and an optimised checkout flow.",
+                    industry="Web",
+                    client_name="LuxeShop",
+                    cover_image="/images/projects/saas-landing.svg",
+                    technologies=["Next.js", "Sanity CMS", "Shopify API", "TypeScript"],
+                    featured=False,
+                    display_order=3
+                ),
+                # Mobile projects
                 Project(
                     title="HealthTech Patient Portal",
                     slug="healthtech-portal",
-                    description="HIPAA-compliant telemedicine and patient scheduling application.",
-                    industry="Healthcare",
+                    description="HIPAA-compliant telemedicine and patient scheduling application with real-time video consultations.",
+                    industry="Mobile",
                     client_name="PulseHealth",
                     cover_image="/images/projects/mobile-booking.svg",
                     technologies=["React Native", "Python", "WebSockets"],
                     featured=False,
-                    display_order=2
-                )
+                    display_order=4
+                ),
+                Project(
+                    title="Fitness Tracking App",
+                    slug="fitness-tracker",
+                    description="AI-powered personal fitness companion with workout planning, nutrition tracking, and wearable device integration.",
+                    industry="Mobile",
+                    client_name="FitCore",
+                    cover_image="/images/projects/mobile-booking.svg",
+                    technologies=["React Native", "Swift", "CoreML", "Firebase"],
+                    featured=False,
+                    display_order=5
+                ),
+                Project(
+                    title="Real-Estate Marketplace",
+                    slug="real-estate-marketplace",
+                    description="Cross-platform property marketplace with AR property previews, mortgage calculators, and agent live-chat.",
+                    industry="Mobile",
+                    client_name="EstateIQ",
+                    cover_image="/images/projects/mobile-booking.svg",
+                    technologies=["Flutter", "FastAPI", "ARKit", "Mapbox"],
+                    featured=False,
+                    display_order=6
+                ),
+                # Platform projects
+                Project(
+                    title="DevOps Observability Platform",
+                    slug="devops-observability",
+                    description="Unified observability platform aggregating logs, metrics, and traces across microservices with smart alerting.",
+                    industry="Platform",
+                    client_name="CloudNine",
+                    cover_image="/images/projects/saas-landing.svg",
+                    technologies=["Go", "Prometheus", "Grafana", "Kubernetes"],
+                    featured=False,
+                    display_order=7
+                ),
+                Project(
+                    title="AI Content Pipeline",
+                    slug="ai-content-pipeline",
+                    description="Automated content generation and moderation platform powered by LLMs with human-in-the-loop review workflows.",
+                    industry="Platform",
+                    client_name="Contentify",
+                    cover_image="/images/projects/saas-landing.svg",
+                    technologies=["Python", "LangChain", "OpenAI", "Celery"],
+                    featured=False,
+                    display_order=8
+                ),
             ]
             session.add_all(initial_projects)
 
@@ -153,8 +225,8 @@ def create_app() -> FastAPI:
         description="Core API for Levora Tech Services",
         version="1.0.0",
         openapi_url="/api/v1/openapi.json",
-        docs_url="/api/v1/docs",
-        redoc_url="/api/v1/redoc",
+        docs_url=None,
+        redoc_url=None,
         lifespan=lifespan,
     )
 
@@ -190,6 +262,32 @@ def create_app() -> FastAPI:
     app.add_api_route("/health/live", liveness_check, tags=["Health"])
     app.add_api_route("/health/ready", readiness_check, tags=["Health"])
     app.add_api_route("/metrics", get_metrics, tags=["Telemetry"])
+
+    # Custom Docs — unpkg CDN avoids jsdelivr.net blocking.
+    # Cache-Control: no-store prevents the browser from caching the Swagger HTML,
+    # which was the root cause of stale CDN URLs appearing after code changes.
+    @app.get("/api/v1/docs", include_in_schema=False)
+    async def custom_swagger_ui() -> HTMLResponse:
+        response = get_swagger_ui_html(
+            openapi_url="/api/v1/openapi.json",
+            title=f"{settings.APP_NAME} - Docs",
+            swagger_js_url="https://unpkg.com/swagger-ui-dist@5/swagger-ui-bundle.js",
+            swagger_css_url="https://unpkg.com/swagger-ui-dist@5/swagger-ui.css",
+        )
+        response.headers["Cache-Control"] = "no-store, no-cache, must-revalidate"
+        response.headers["Pragma"] = "no-cache"
+        return response
+
+    @app.get("/api/v1/redoc", include_in_schema=False)
+    async def custom_redoc() -> HTMLResponse:
+        response = get_redoc_html(
+            openapi_url="/api/v1/openapi.json",
+            title=f"{settings.APP_NAME} - ReDoc",
+            redoc_js_url="https://unpkg.com/redoc@latest/bundles/redoc.standalone.js",
+        )
+        response.headers["Cache-Control"] = "no-store, no-cache, must-revalidate"
+        response.headers["Pragma"] = "no-cache"
+        return response
 
     # Routers
     app.include_router(api_router, prefix="/api/v1")

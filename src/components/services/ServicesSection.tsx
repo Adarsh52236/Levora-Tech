@@ -3,7 +3,7 @@
 import { useEffect, useRef, useState } from 'react'
 import { useServices } from '@/hooks/useServices'
 import { SectionHeading } from '@/components/common/SectionHeading'
-import { ServiceSkeleton } from '@/components/loaders/ServiceSkeleton'
+import { SectionLoader } from '@/components/loaders/UiverseLoader'
 import { ApiError } from '@/components/common/ApiError'
 import { EmptyState } from '@/components/common/EmptyState'
 import { ServiceGrid } from './ServiceGrid'
@@ -60,7 +60,7 @@ export function ServicesSection() {
           </div>
         )}
 
-        {isLoading && <ServiceSkeleton />}
+        {isLoading && <SectionLoader label="Loading services…" />}
 
         {!isLoading && !error && services && services.length === 0 && (
           <EmptyState

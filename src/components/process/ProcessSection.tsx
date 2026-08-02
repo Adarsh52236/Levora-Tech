@@ -1,6 +1,6 @@
 'use client'
 
-import { useState } from 'react'
+
 import { motion } from 'framer-motion'
 import { Compass, PenTool, Cpu, Rocket } from 'lucide-react'
 import { SectionHeading } from '@/components/common/SectionHeading'
@@ -41,11 +41,9 @@ const steps = [
 ]
 
 export function ProcessSection() {
-  const [hoverPaused, setHoverPaused] = useState(false)
   const { index: active, setIndex: setActive, ref, paused } = useAutoAdvance({
     length: steps.length,
     interval: INTERVAL,
-    paused: hoverPaused,
   })
 
   return (
@@ -53,8 +51,6 @@ export function ProcessSection() {
       id="process"
       ref={ref}
       className="relative bg-section-cool px-4 py-24 sm:py-32"
-      onMouseEnter={() => setHoverPaused(true)}
-      onMouseLeave={() => setHoverPaused(false)}
     >
       <div className="mx-auto max-w-6xl">
         <SectionHeading

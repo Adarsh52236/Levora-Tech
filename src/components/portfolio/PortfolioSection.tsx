@@ -4,7 +4,7 @@ import { useState } from 'react'
 import { motion } from 'framer-motion'
 import { Project } from '@/types/project'
 import { useProjects } from '@/hooks/useProjects'
-import { PortfolioSkeleton } from '@/components/loaders/PortfolioSkeleton'
+import { SectionLoader } from '@/components/loaders/UiverseLoader'
 import { ApiError } from '@/components/common/ApiError'
 import { EmptyState } from '@/components/common/EmptyState'
 import { SectionHeading } from '@/components/common/SectionHeading'
@@ -51,7 +51,7 @@ export function PortfolioSection() {
           </div>
         )}
 
-        {isLoading && <PortfolioSkeleton />}
+        {isLoading && <SectionLoader label="Loading projects…" />}
 
         {!isLoading && !error && projects && projects.length === 0 && (
           <EmptyState

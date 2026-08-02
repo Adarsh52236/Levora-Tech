@@ -7,7 +7,7 @@ import { useTestimonials } from '@/hooks/useTestimonials'
 import { SectionHeading } from '@/components/common/SectionHeading'
 import { AutoProgressDots } from '@/components/ui/auto-progress-dots'
 import { useAutoAdvance } from '@/hooks/useAutoAdvance'
-import { Skeleton } from '@/components/ui/skeleton'
+import { SectionLoader } from '@/components/loaders/UiverseLoader'
 import { ApiError } from '@/components/common/ApiError'
 import { TestimonialCard } from './TestimonialCard'
 
@@ -46,11 +46,7 @@ export function TestimonialsSection() {
           </div>
         )}
 
-        {isLoading && (
-          <div className="mt-12">
-            <Skeleton className="h-[16rem] w-full rounded-3xl" />
-          </div>
-        )}
+        {isLoading && <SectionLoader label="Loading testimonials…" />}
 
         {!isLoading && !error && count === 0 && (
           <div className="mt-12 flex flex-col items-center justify-center rounded-3xl border border-dashed border-border bg-secondary/30 p-12 text-center">
