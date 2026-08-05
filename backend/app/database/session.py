@@ -13,6 +13,7 @@ engine = create_async_engine(
     db_url,
     echo=settings.DEBUG,
     future=True,
+    connect_args={"prepared_statement_cache_size": 0},
 )
 
 SessionLocal = async_sessionmaker(
