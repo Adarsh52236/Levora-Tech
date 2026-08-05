@@ -1,4 +1,6 @@
-export const API_BASE_URL = process.env.NEXT_PUBLIC_API_URL || 'http://127.0.0.1:8000'
+// Strip trailing slashes and /api/v1 from the base URL to prevent duplication
+const rawBaseUrl = process.env.NEXT_PUBLIC_API_URL || 'http://127.0.0.1:8000'
+export const API_BASE_URL = rawBaseUrl.replace(/\/api\/v1\/?$/, '').replace(/\/$/, '')
 export const API_PREFIX = '/api/v1'
 
 export const ENDPOINTS = {
