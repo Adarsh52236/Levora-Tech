@@ -33,8 +33,8 @@ export const metadata: Metadata = {
     'technology studio',
   ],
   icons: {
-    icon: '/images/brand/levora-mark.svg',
-    apple: '/images/brand/levora-mark.svg',
+    icon: '/images/brand/levora-tab-logo.svg',
+    apple: '/images/brand/levora-tab-logo.svg',
   },
   openGraph: {
     title: SITE_METADATA.title,
