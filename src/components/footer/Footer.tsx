@@ -1,5 +1,7 @@
 'use client'
 
+import { useState } from 'react'
+
 import { ArrowUp, Globe, Mail, Share2 } from 'lucide-react'
 import { Logo } from '@/components/ui/logo'
 import { COMPANY_INFO } from '@/lib/constants/company'
@@ -12,10 +14,45 @@ const social = [
 ]
 
 export function Footer() {
+  const [email, setEmail] = useState('')
+  const [status, setStatus] = useState<'idle' | 'loading' | 'success' | 'error'>('idle')
+  const [message, setMessage] = useState('')
+
   const go = (id: string) =>
     document.getElementById(id)?.scrollIntoView({ behavior: 'smooth' })
 
   const scrollTop = () => window.scrollTo({ top: 0, behavior: 'smooth' })
+
+  const handleSubscribe = async (e: React.FormEvent) => {
+    e.preventDefault()
+    if (!email) return
+
+    setStatus('loading')
+    setMessage('')
+
+    try {
+      const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL || 'http://localhost:8000'}/api/v1/newsletter/subscribe`, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({ email }),
+      })
+
+      if (res.ok) {
+        setStatus('success')
+        setMessage('Thanks for subscribing!')
+        setEmail('')
+      } else {
+        const data = await res.json()
+        setStatus('error')
+        setMessage(data.detail || 'Failed to subscribe')
+      }
+    } catch (error) {
+      setStatus('error')
+      setMessage('Something went wrong. Please try again.')
+    }
+  }
 
   return (
     <footer className="relative border-t border-border bg-section-cool px-4 py-16">
@@ -68,17 +105,32 @@ export function Footer() {
           <p className="mt-4 text-sm text-muted-foreground">
             Get insights on product engineering and digital craft.
           </p>
-          <div className="mt-4 flex gap-2">
-            <input
-              type="email"
-              placeholder="you@company.com"
-              className="flex-1 rounded-xl border border-border bg-background px-3 py-2 text-sm outline-none focus:ring-2 focus:ring-brand-blue/30"
-              aria-label="Email for newsletter"
-            />
-            <button className="rounded-xl bg-brand-blue px-4 py-2 text-sm font-semibold text-primary-foreground">
-              Join
-            </button>
-          </div>
+          <form onSubmit={handleSubscribe} className="mt-4 flex flex-col gap-2">
+            <div className="flex gap-2">
+              <input
+                type="email"
+                value={email}
+                onChange={(e) => setEmail(e.target.value)}
+                placeholder="you@company.com"
+                className="flex-1 rounded-xl border border-border bg-background px-3 py-2 text-sm outline-none focus:ring-2 focus:ring-brand-blue/30 disabled:opacity-50"
+                aria-label="Email for newsletter"
+                disabled={status === 'loading'}
+                required
+              />
+              <button 
+                type="submit" 
+                disabled={status === 'loading'}
+                className="rounded-xl bg-brand-blue px-4 py-2 text-sm font-semibold text-primary-foreground transition-opacity hover:opacity-90 disabled:opacity-50"
+              >
+                {status === 'loading' ? 'Joining...' : 'Join'}
+              </button>
+            </div>
+            {message && (
+              <p className={`text-xs ${status === 'success' ? 'text-green-500' : 'text-red-500'}`}>
+                {message}
+              </p>
+            )}
+          </form>
         </div>
       </div>
 

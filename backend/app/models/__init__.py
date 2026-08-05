@@ -5,6 +5,7 @@ from app.models.testimonial import Testimonial
 from app.models.contact import ContactSubmission, ContactStatus
 from app.models.admin import AdminUser
 from app.models.audit import AuditLog
+from app.models.newsletter import NewsletterSubscriber
 
 # This allows Alembic to easily import all models by just importing app.models
 __all__ = [
@@ -16,5 +17,6 @@ __all__ = [
     "ContactSubmission",
     "ContactStatus",
     "AdminUser",
-    "AuditLog"
+    "AuditLog",
+    "NewsletterSubscriber"
 ]

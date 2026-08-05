@@ -10,7 +10,8 @@ from app.api.v1.endpoints import (
     admin_projects, 
     admin_testimonials, 
     upload,
-    metrics
+    metrics,
+    newsletter
 )
 
 api_router = APIRouter()
@@ -21,6 +22,7 @@ api_router.include_router(services.router, tags=["Services"])
 api_router.include_router(projects.router, tags=["Projects"])
 api_router.include_router(testimonials.router, tags=["Testimonials"])
 api_router.include_router(contact.router, tags=["Contact"])
+api_router.include_router(newsletter.router, prefix="/newsletter", tags=["Newsletter"])
 
 # Metrics
 api_router.include_router(metrics.router, tags=["Telemetry"])

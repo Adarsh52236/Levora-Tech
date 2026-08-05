@@ -1,6 +1,6 @@
 'use client'
 
-import { useState } from 'react'
+import { useState, useEffect, useRef } from 'react'
 import { motion } from 'framer-motion'
 import { Project } from '@/types/project'
 import { useProjects } from '@/hooks/useProjects'
@@ -13,18 +13,27 @@ import { useAutoAdvance } from '@/hooks/useAutoAdvance'
 import { FeaturedProjectCard } from './FeaturedProjectCard'
 import { PortfolioGrid } from './PortfolioGrid'
 
-const projectFilters = ['All', 'Web', 'Mobile', 'Platform']
-
 export function PortfolioSection() {
   const { projects, isLoading, error, mutate } = useProjects()
   const [hoverPaused, setHoverPaused] = useState(false)
   const [selected, setSelected] = useState<Project | null>(null)
-  const { index: filterIndex, setIndex: setFilterIndex, ref } = useAutoAdvance({
-    length: projectFilters.length,
-    interval: 5500,
-    paused: hoverPaused,
-  })
-  const filter = projectFilters[filterIndex]
+  const [filterIndex, setFilterIndex] = useState(0)
+
+  const projectFilters = ['All', 'Web', 'Mobile', 'Platform']
+  const filter = projectFilters[filterIndex] || 'All'
+
+  // We can't use AutoAdvance easily with dynamic lengths if it's changing, 
+  // but let's just use normal state for simplicity or keep AutoAdvance.
+  // Replacing useAutoAdvance to prevent bugs if projectFilters changes size:
+  const ref = useRef<HTMLDivElement>(null)
+  
+  useEffect(() => {
+    if (hoverPaused || projectFilters.length <= 1) return
+    const timer = setInterval(() => {
+      setFilterIndex((prev) => (prev + 1) % projectFilters.length)
+    }, 5500)
+    return () => clearInterval(timer)
+  }, [hoverPaused, projectFilters.length])
 
   const featured = projects && projects.length > 0 ? (projects.find((p) => p.featured) ?? projects[0]) : null
   const rest = projects ? projects.filter((p) => p.id !== featured?.id) : []

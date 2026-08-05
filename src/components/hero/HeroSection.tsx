@@ -9,9 +9,9 @@ import { MagneticButton } from '@/components/ui/magnetic-button'
 import { Marquee } from '@/components/ui/marquee'
 import { fadeUp, staggerContainer } from '@/lib/motion'
 
-const VantaBackground = dynamic(
+const AuraBackground = dynamic(
   () =>
-    import('@/components/ui/vanta-background').then((m) => m.VantaBackground),
+    import('@/components/ui/aura-background').then((m) => m.AuraBackground),
   { ssr: false },
 )
 
@@ -43,7 +43,23 @@ export function HeroSection() {
       onMouseMove={onMove}
       className="noise-overlay relative flex min-h-screen flex-col items-center justify-center overflow-hidden px-4 pt-28"
     >
-      <VantaBackground className="absolute inset-0" />
+      <AuraBackground 
+        className="absolute inset-0 opacity-80" 
+        appearance={{
+          shaderStyle: "fluid",
+          scale: 1.5,
+          distortion: 1.5,
+          speed: 0.3,
+          intensity: 1.5,
+          detail: 4
+        }}
+        colors={{
+          color1: "#fdfdfd", 
+          color2: "#f0f4f8", 
+          color3: "#1a6bb5", 
+          color4: "#f9b916"  
+        }}
+      />
 
       <motion.div
         style={{ x: glowX, y: glowY }}

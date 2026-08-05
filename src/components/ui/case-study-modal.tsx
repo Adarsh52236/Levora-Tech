@@ -3,6 +3,7 @@
 import { AnimatePresence, motion } from 'framer-motion'
 import { X } from 'lucide-react'
 import Image from 'next/image'
+import { DeviceMockup } from './device-mockup'
 import type { Project } from '@/types/project'
 
 type CaseStudyModalProps = {
@@ -11,6 +12,8 @@ type CaseStudyModalProps = {
 }
 
 export function CaseStudyModal({ project, onClose }: CaseStudyModalProps) {
+  const isMobile = project ? (project.category === 'Mobile' || project.industry === 'Mobile' || project.category === 'iOS' || project.industry === 'iOS') : false;
+
   return (
     <AnimatePresence>
       {project && (
@@ -18,7 +21,7 @@ export function CaseStudyModal({ project, onClose }: CaseStudyModalProps) {
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
           exit={{ opacity: 0 }}
-          className="fixed inset-0 z-[250] flex items-end justify-center p-4 sm:items-center"
+          className="fixed inset-0 z-[250] flex items-end justify-center p-4 sm:items-center sm:p-6"
           onClick={onClose}
         >
           <div className="absolute inset-0 bg-background/70 backdrop-blur-sm" />
@@ -28,23 +31,30 @@ export function CaseStudyModal({ project, onClose }: CaseStudyModalProps) {
             exit={{ opacity: 0, y: 40, scale: 0.97 }}
             transition={{ type: 'spring', stiffness: 320, damping: 32 }}
             onClick={(e) => e.stopPropagation()}
-            className="relative max-h-[90vh] w-full max-w-2xl overflow-y-auto rounded-2xl border border-border bg-background shadow-2xl"
+            className="relative max-h-[90vh] w-full max-w-3xl overflow-y-auto rounded-2xl border border-border bg-background shadow-2xl"
           >
             <button
               onClick={onClose}
-              className="absolute right-4 top-4 z-10 inline-flex h-9 w-9 items-center justify-center rounded-full border border-border bg-background text-muted-foreground hover:text-foreground"
+              className="absolute right-4 top-4 z-50 inline-flex h-9 w-9 items-center justify-center rounded-full border border-border bg-background/80 backdrop-blur-sm text-muted-foreground hover:text-foreground hover:bg-background"
               aria-label="Close case study"
             >
               <X className="h-4 w-4" />
             </button>
 
-            <div className="relative h-48 w-full overflow-hidden sm:h-56">
-              <Image
-                src={project.cover_image || project.image || ''}
-                alt={project.title}
-                fill
-                className="object-cover"
-              />
+            <div className="w-full bg-muted/20 p-6 sm:p-10 flex justify-center border-b border-border">
+              <DeviceMockup 
+                type={project.category || project.industry || 'Web'} 
+                className={isMobile ? "w-[240px] h-[500px] sm:w-[280px] sm:h-[580px]" : "w-full aspect-[16/10] sm:aspect-video"}
+              >
+                <div className="relative h-full w-full bg-background">
+                  <Image
+                    src={project.cover_image || project.image || ''}
+                    alt={project.title}
+                    fill
+                    className="object-cover object-top"
+                  />
+                </div>
+              </DeviceMockup>
             </div>
 
             <div className="p-6 sm:p-8">
