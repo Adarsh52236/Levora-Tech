@@ -2,7 +2,7 @@ export interface Testimonial {
   id: string
   client_name: string
   name?: string // fallback alias
-  company: str
+  company: string
   designation: string
   role?: string // fallback alias
   avatar_url?: string

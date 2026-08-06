@@ -3,12 +3,32 @@ import { ENDPOINTS } from './endpoints'
 import { Project } from '@/types/project'
 import { ApiResponse } from '@/types/api'
 
+import { fallbackProjects } from '@/data/mockData'
+
 export async function fetchProjects(): Promise<ApiResponse<Project[]>> {
-  return apiClient.get<Project[]>(ENDPOINTS.PROJECTS)
+  try {
+    return await apiClient.get<Project[]>(ENDPOINTS.PROJECTS)
+  } catch (error) {
+    console.warn('Network error fetching projects, using fallback data:', error)
+    return {
+      success: true,
+      data: fallbackProjects,
+      message: 'Fallback data used due to network error'
+    }
+  }
 }
 
 export async function fetchProjectBySlug(slug: string): Promise<ApiResponse<Project>> {
-  return apiClient.get<Project>(ENDPOINTS.PROJECT_BY_SLUG(slug))
+  try {
+    return await apiClient.get<Project>(ENDPOINTS.PROJECT_BY_SLUG(slug))
+  } catch (error) {
+    console.warn('Network error fetching project by slug, using fallback data:', error)
+    const project = fallbackProjects.find(p => p.slug === slug)
+    if (project) {
+      return { success: true, data: project, message: 'Fallback data used due to network error' }
+    }
+    throw error
+  }
 }
 
 // Admin CMS Placeholders

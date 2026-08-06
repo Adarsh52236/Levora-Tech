@@ -3,7 +3,7 @@ export interface Service {
   title: string
   slug: string
   short_description: string
-  description: str
+  description: string
   icon: string
   display_order: number
   is_active: boolean

@@ -3,8 +3,19 @@ import { ENDPOINTS } from './endpoints'
 import { Testimonial } from '@/types/testimonial'
 import { ApiResponse } from '@/types/api'
 
+import { fallbackTestimonials } from '@/data/mockData'
+
 export async function fetchTestimonials(): Promise<ApiResponse<Testimonial[]>> {
-  return apiClient.get<Testimonial[]>(ENDPOINTS.TESTIMONIALS)
+  try {
+    return await apiClient.get<Testimonial[]>(ENDPOINTS.TESTIMONIALS)
+  } catch (error) {
+    console.warn('Network error fetching testimonials, using fallback data:', error)
+    return {
+      success: true,
+      data: fallbackTestimonials,
+      message: 'Fallback data used due to network error'
+    }
+  }
 }
 
 // Admin CMS Placeholders
