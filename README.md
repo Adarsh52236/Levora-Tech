@@ -1,5 +1,5 @@
 <div align="center">
-  <img src="https://via.placeholder.com/150x150?text=Levora+Tech" alt="Levora Tech Logo" width="120" height="120" />
+  <img src="public/images/brand/levora-tab-logo.svg" alt="Levora Tech Logo" width="120" height="120" />
   <h1>🚀 Levora Tech Platform</h1>
   <p><strong>A Modern, High-Performance Web Agency & Portfolio Platform</strong></p>
   
