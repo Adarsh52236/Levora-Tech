@@ -9,13 +9,14 @@ if db_url.startswith("postgresql://"):
 elif db_url.startswith("postgres://"):
     db_url = db_url.replace("postgres://", "postgresql+asyncpg://", 1)
 
+from sqlalchemy.pool import NullPool
+
 engine = create_async_engine(
     db_url,
     echo=settings.DEBUG,
     future=True,
-    pool_pre_ping=True,
+    poolclass=NullPool,
     connect_args={"statement_cache_size": 0},
-    prepared_statement_cache_size=0,
 )
 
 SessionLocal = async_sessionmaker(
